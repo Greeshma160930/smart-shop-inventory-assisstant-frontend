@@ -9,7 +9,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import axiosClient from '../api/axiosClient';
+import axiosClient, { getErrorMessage } from '../api/axiosClient';
 import DataTable from '../components/DataTable';
 import Loader from '../components/Loader';
 import Toast from '../components/Toast';
@@ -38,7 +38,7 @@ const Alerts = () => {
       setTotalElements(res.data.totalElements || 0);
       setUnreadCount(countRes.data.unreadCount || 0);
     } catch (err) {
-      setToast({ message: 'Failed to fetch alerts.', type: 'error' });
+      setToast({ message: getErrorMessage(err, 'Failed to fetch alerts.'), type: 'error' });
     } finally {
       setLoading(false);
     }

@@ -9,7 +9,7 @@ import {
   Package,
   Layers,
 } from 'lucide-react';
-import axiosClient, { formatNumber } from '../api/axiosClient';
+import axiosClient, { formatNumber, getErrorMessage } from '../api/axiosClient';
 import ForecastChart from '../components/ForecastChart';
 import StatCard from '../components/StatCard';
 import Loader from '../components/Loader';
@@ -44,7 +44,7 @@ const AiPrediction = () => {
         setCurrentForecast(detailRes.data);
       }
     } catch (err) {
-      setToast({ message: 'Failed to load AI forecasting data.', type: 'error' });
+      setToast({ message: getErrorMessage(err, 'Failed to load AI forecasting data.'), type: 'error' });
     } finally {
       setLoading(false);
     }

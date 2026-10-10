@@ -10,7 +10,7 @@ import {
   ArrowUpRight,
   Sliders,
 } from 'lucide-react';
-import axiosClient, { formatCurrency } from '../api/axiosClient';
+import axiosClient, { formatCurrency, getErrorMessage } from '../api/axiosClient';
 import DataTable from '../components/DataTable';
 import Toast from '../components/Toast';
 
@@ -39,7 +39,7 @@ const Inventory = () => {
       const res = await axiosClient.get('/products/all');
       setProducts(res.data || []);
     } catch (err) {
-      setToast({ message: 'Failed to fetch inventory stock.', type: 'error' });
+      setToast({ message: getErrorMessage(err, 'Failed to fetch inventory stock.'), type: 'error' });
     }
   };
 
@@ -53,7 +53,7 @@ const Inventory = () => {
       setLogsTotalPages(res.data.totalPages || 0);
       setLogsTotalElements(res.data.totalElements || 0);
     } catch (err) {
-      setToast({ message: 'Failed to load inventory logs.', type: 'error' });
+      setToast({ message: getErrorMessage(err, 'Failed to load inventory logs.'), type: 'error' });
     } finally {
       setLoading(false);
     }

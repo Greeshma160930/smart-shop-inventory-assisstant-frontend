@@ -9,7 +9,7 @@ import {
   ArrowUpDown,
   RefreshCw,
 } from 'lucide-react';
-import axiosClient, { formatCurrency } from '../api/axiosClient';
+import axiosClient, { formatCurrency, getErrorMessage } from '../api/axiosClient';
 import DataTable from '../components/DataTable';
 import ProductForm from '../components/ProductForm';
 import ConfirmDialog from '../components/ConfirmDialog';
@@ -50,7 +50,7 @@ const Products = () => {
       setTotalPages(res.data.totalPages || 0);
       setTotalElements(res.data.totalElements || 0);
     } catch (err) {
-      setToast({ message: 'Failed to fetch products.', type: 'error' });
+      setToast({ message: getErrorMessage(err, 'Failed to fetch products.'), type: 'error' });
     } finally {
       setLoading(false);
     }

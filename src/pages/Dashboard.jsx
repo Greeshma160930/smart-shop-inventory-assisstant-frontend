@@ -10,7 +10,7 @@ import {
   Boxes,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import axiosClient, { formatCurrency, formatNumber } from '../api/axiosClient';
+import axiosClient, { formatCurrency, formatNumber, getErrorMessage } from '../api/axiosClient';
 import StatCard from '../components/StatCard';
 import AlertBanner from '../components/AlertBanner';
 import SalesTrendChart from '../components/SalesTrendChart';
@@ -37,7 +37,7 @@ const Dashboard = () => {
       setSummary(sumRes.data);
       setAllProducts(prodRes.data || []);
     } catch (err) {
-      setToast({ message: 'Failed to load dashboard data.', type: 'error' });
+      setToast({ message: getErrorMessage(err, 'Failed to load dashboard data.'), type: 'error' });
     } finally {
       setLoading(false);
     }

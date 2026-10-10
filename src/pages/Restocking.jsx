@@ -7,7 +7,7 @@ import {
   TrendingUp,
   CheckCircle2,
 } from 'lucide-react';
-import axiosClient, { formatNumber } from '../api/axiosClient';
+import axiosClient, { formatNumber, getErrorMessage } from '../api/axiosClient';
 import Loader from '../components/Loader';
 import Toast from '../components/Toast';
 
@@ -33,7 +33,7 @@ const Restocking = () => {
       });
       setQuantities(initialQty);
     } catch (err) {
-      setToast({ message: 'Failed to fetch restocking recommendations.', type: 'error' });
+      setToast({ message: getErrorMessage(err, 'Failed to fetch restocking recommendations.'), type: 'error' });
     } finally {
       setLoading(false);
     }

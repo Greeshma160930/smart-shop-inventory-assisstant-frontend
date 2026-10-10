@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -25,7 +25,8 @@ axiosClient.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       // Don't auto-redirect on login or register endpoints
-      const isAuthUrl = error.config.url.includes('/auth/login') || error.config.url.includes('/auth/register');
+      const url = error.config?.url || '';
+      const isAuthUrl = url.includes('/auth/login') || url.includes('/auth/register');
       if (!isAuthUrl) {
         localStorage.removeItem('smartshop_token');
         localStorage.removeItem('smartshop_user');
@@ -35,6 +36,27 @@ axiosClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// Centralized error message extractor for user-friendly notifications
+export const getErrorMessage = (error, defaultMessage = 'An unexpected error occurred.') => {
+  if (!error) return defaultMessage;
+  if (!error.response) {
+    return 'Cannot connect to backend server (http://localhost:8080). Please ensure Spring Boot is running.';
+  }
+  if (error.response.status === 503) {
+    return error.response.data?.message || 'Database service unavailable. Please check the Aiven Cloud MySQL connection.';
+  }
+  if (error.response.status === 401) {
+    return error.response.data?.message || 'Session expired or invalid credentials. Please sign in again.';
+  }
+  if (error.response.status === 403) {
+    return error.response.data?.message || 'Access denied. You do not have permission for this action.';
+  }
+  if (error.response.status === 409) {
+    return error.response.data?.message || 'Conflict: Record with these details already exists.';
+  }
+  return error.response.data?.message || error.message || defaultMessage;
+};
 
 // Indian Number & Rupee Currency Formatter
 // Example: 125000 -> ₹1,25,000.00

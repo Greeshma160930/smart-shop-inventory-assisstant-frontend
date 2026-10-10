@@ -8,7 +8,7 @@ import {
   Lightbulb,
   RefreshCw,
 } from 'lucide-react';
-import axiosClient, { formatCurrency, formatNumber } from '../api/axiosClient';
+import axiosClient, { formatCurrency, formatNumber, getErrorMessage } from '../api/axiosClient';
 import Loader from '../components/Loader';
 import Toast from '../components/Toast';
 
@@ -45,7 +45,7 @@ const Reports = () => {
         setProductInsights(res.data || []);
       }
     } catch (err) {
-      setToast({ message: 'Failed to generate report.', type: 'error' });
+      setToast({ message: getErrorMessage(err, 'Failed to generate report.'), type: 'error' });
     } finally {
       setLoading(false);
     }

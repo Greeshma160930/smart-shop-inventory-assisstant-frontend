@@ -9,7 +9,7 @@ import {
   IndianRupee,
   Layers,
 } from 'lucide-react';
-import axiosClient, { formatCurrency, formatNumber } from '../api/axiosClient';
+import axiosClient, { formatCurrency, formatNumber, getErrorMessage } from '../api/axiosClient';
 import DataTable from '../components/DataTable';
 import SaleForm from '../components/SaleForm';
 import Toast from '../components/Toast';
@@ -56,7 +56,7 @@ const Sales = () => {
       setTotalPages(res.data.totalPages || 0);
       setTotalElements(res.data.totalElements || 0);
     } catch (err) {
-      setToast({ message: 'Failed to fetch sales history.', type: 'error' });
+      setToast({ message: getErrorMessage(err, 'Failed to fetch sales history.'), type: 'error' });
     } finally {
       setLoading(false);
     }
